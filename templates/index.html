@@ -1,25 +1,45 @@
+html
 <!DOCTYPE html>
 <html>
    <head>
        <title>Live Transcription</title>
+       <style>
+           #transcript-container {
+               display: flex;
+               flex-wrap: wrap;
+               height: 500px;
+               width: 30%;
+               overflow-y: scroll;
+               background-image: url('https://img.freepik.com/premium-photo/natural-japanese-recycled-paper-texture-background_118047-602.jpg?w=740');
+               background-repeat: repeat;
+               padding: 20px;
+               line-height: 1.5;
+               font-family: 'Hiragino Mincho Pro', serif;
+               font-size: 18px;
+           }
+           .transcript-line {
+               writing-mode: horizontal-tb;
+               white-space: pre-wrap;
+               margin-bottom: 10px;
+           }
+       </style>
    </head>
    <body>
         <h1>Transcribe Audio With Flask 2.0</h1>
-        <p id="status">Connection status will go here</p>
-        <p id="transcript"></p>
-
-        <script>
+        <div>
+            <p id="status">Connection status will go here</p>
+        </div>
+        <div id="transcript-container">
+        </div>
+         <script>
             navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
             if (!MediaRecorder.isTypeSupported('audio/webm'))
                 return alert('Browser not supported')
-
-            const mediaRecorder = new MediaRecorder(stream, {
+             const mediaRecorder = new MediaRecorder(stream, {
                 mimeType: 'audio/webm',
             })
-
-            const socket = new WebSocket('ws://localhost:5555/listen')
-
-            socket.onopen = () => {
+             const socket = new WebSocket('ws://localhost:5555/listen')
+             socket.onopen = () => {
                 document.querySelector('#status').textContent = 'Connected'
                 mediaRecorder.addEventListener('dataavailable', async (event) => {
                     if (event.data.size > 0 && socket.readyState == 1) {
@@ -28,23 +48,17 @@
             })
             mediaRecorder.start(250)
             }
-
-            socket.onmessage = (message) => {
+             socket.onmessage = (message) => {
                 const received = message.data
                 if (received) {
-                    document.querySelector('#transcript').textContent +=  ' ' + message.data
-                  
-
+                    const transcriptContainer = document.querySelector('#transcript-container')
+                    const transcriptLine = document.createElement('p')
+                    transcriptLine.className = 'transcript-line'
+                    transcriptLine.textContent = message.data
+                    transcriptContainer.appendChild(transcriptLine)
                 }
-
-           }
-
-           })
-          
-
-
-        
+            }
+            })
         </script>
-   
-   </body>
+    </body>
 </html>
