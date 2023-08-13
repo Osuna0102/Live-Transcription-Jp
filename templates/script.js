@@ -1,3 +1,5 @@
+
+  
 navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     if (!MediaRecorder.isTypeSupported('audio/webm'))
         return alert('Browser not supported')
@@ -14,16 +16,16 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
         })
         mediaRecorder.start(250)
     }
-    socket.onmessage = (message) => {
-        const received = message.data
+    socket.onmessage = async (message) => {
+        const received = message.data;
         if (received) {
-            const transcriptContainer = document.querySelector('#transcript-container')
-            const transcriptLine = document.createElement('p')
-            transcriptLine.className = 'transcript-line'
-            transcriptLine.textContent = message.data
-            transcriptContainer.appendChild(transcriptLine)
+            const transcriptContainer = document.querySelector('#transcript-container');
+            const transcriptLine = document.createElement('p');
+            transcriptLine.className = 'transcript-line';
+            transcriptLine.textContent = received; // Set the received data as the text content of the transcript line
+            transcriptContainer.appendChild(transcriptLine);
         }
-    }
+      };
 })
 
 let startTime = Date.now();

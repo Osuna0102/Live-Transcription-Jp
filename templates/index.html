@@ -3,9 +3,16 @@
    <head>
        <title>Live Transcription</title>
        <link rel="stylesheet" type="text/css" href="styles.css">
+       <style>
+            body {
+                background-color: rgba(0, 0, 0,0.85);
+            }
+       </style>
    </head>
    <body>
         <div id="container">
+            <p id="status">Connection status will go here</p>
+
             <div id="menu">
                 <div style="text-align: right;">
                     <span title="Click to pause timer" class="menuitem" style="margin-right: 0.5em; display: inline-block;">
@@ -21,8 +28,6 @@
             </div>
             <div id="transcript-container"></div>
         </div>
-        <p id="status">Connection status will go here</p>
-
         <script src="script.js"></script>
     </body>
 </html>
