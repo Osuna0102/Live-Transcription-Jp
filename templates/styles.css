@@ -26,26 +26,22 @@
 }
 
 #transcript-container {
-    display: flex;
-    flex-wrap: wrap;
+    flex-direction: column-reverse; /* Display columns from top to bottom */
+    align-items: flex-end; /* Align content to the top right */
     height: 800px;
     width: 98%;
-    overflow-x: auto; /* Change to 'auto' for automatic scroll */
     color: #bdbdbd;
     padding: 20px;
-    line-height: 0.2; /* Adjust line height as desired */
+    line-height: 1.5; /* Adjust line height as desired */
     font-family: 'Hiragino Mincho Pro', serif;
     font-size: 18px;
     writing-mode: vertical-rl; /* Change text direction to right-to-left */
-    text-align: right; /* Align text to the right */
-    margin-left: auto; /* Push the container to the right side */
 }
 
 .transcript-line {
     writing-mode: vertical-rl;
     white-space: pre-wrap;    
     margin: 10%;
-
     margin-bottom: 10px;
 }
 

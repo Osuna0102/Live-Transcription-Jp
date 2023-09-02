@@ -1,5 +1,3 @@
-
-  
 navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     if (!MediaRecorder.isTypeSupported('audio/webm'))
         return alert('Browser not supported')
@@ -7,6 +5,8 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
         mimeType: 'audio/webm',
     })
     const socket = new WebSocket('ws://localhost:5555/listen')
+    const transcriptContainer = document.querySelector('#transcript-container');
+
     socket.onopen = () => {
         document.querySelector('#status').textContent = 'Connected'
         mediaRecorder.addEventListener('dataavailable', async (event) => {
@@ -19,14 +19,15 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     socket.onmessage = async (message) => {
         const received = message.data;
         if (received) {
-            const transcriptContainer = document.querySelector('#transcript-container');
             const transcriptLine = document.createElement('p');
             transcriptLine.className = 'transcript-line';
-            transcriptLine.textContent = received; // Set the received data as the text content of the transcript line
-            transcriptContainer.appendChild(transcriptLine);
+            transcriptLine.textContent = received; // Set the received data as the text content of the new transcript line
+            transcriptContainer.appendChild(transcriptLine); // Append the new transcript line to the container
         }
-      };
+    };
 })
+
+
 
 let startTime = Date.now();
 let wordCount = 0;

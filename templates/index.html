@@ -5,29 +5,65 @@
        <link rel="stylesheet" type="text/css" href="styles.css">
        <style>
             body {
-                background-color: rgba(0, 0, 0,0.85);
+                background-color: rgba(0, 0, 0, 0.85);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+            }
+
+            #container {
+                max-width: 1000%;
+            }
+
+            #transcript-container {
+    max-height: 400px; /* Set a maximum height for the container */
+    overflow-y: auto; /* Enable vertical scrolling */
+    flex-direction: column-reverse;
+    align-items: flex-end;
+}
+
+            .transcript-line {
+                border: 1px solid #ddd;
+                padding: 10px;
+                margin: 10px 0;
+                border-radius: 10px;
             }
        </style>
    </head>
    <body>
-        <div id="container">
-            <p id="status">Connection status will go here</p>
+   <p id="status">Connection status will go here</p>
 
-            <div id="menu">
-                <div style="text-align: right;">
-                    <span title="Click to pause timer" class="menuitem" style="margin-right: 0.5em; display: inline-block;">
-                        <div id="timer"></div>
-                    </span>
-                    <span title="Total characters" style="display: inline;">
-                        <div id="counter"></div>
-                    </span>        
-                    <span title="Words per minute" style="display: inline;">
-                        <div id="wpm"></div>
-                    </span>
-                </div>
+   <div id="menu">
+       <div style="text-align: right;">
+           <span title="Click to pause timer" class="menuitem" style="margin-right: 0.5em; display: inline-block;">
+               <div id="timer"></div>
+           </span>
+           <span title="Total characters" style="display: inline;">
+               <div id="counter"></div>
+           </span>        
+           <span title="Words per minute" style="display: inline;">
+               <div id="wpm"></div>
+           </span>
+       </div>
+   </div>
+        <div id="container">
+
+            <div id="transcript-container">
+                待ちに待ったアップデートの日がやってきた。<br>
+                世界初ＶＲＭＭＯ（ヴァーチャル・リアリティ・マッシブリー・マルチプレイヤー・オンライン）、ファンタジーＲＰＧ。<br>
+                多種族、多種職業、多種スキル、幅広く遊べるゲーム。<br>
+                発売されて１年、本日大型アップデートがやってくる。<br>
+                わたしも引きこもりを始めて３年が過ぎ15歳になる。<br>
+                そして、１年前に出合ったのがこのゲーム。ワールド・ファンタジー・オンラインだ。<br>
+                現実感覚でファンタジーが味わえるゲーム。<br>
+                それから、やり始めて１年間、学校にも行かずにゲーム三昧だ。<br>
+                睡眠？　睡眠は８時間とっているよ。<br>
+                だって眠いもん。
+              </div> 
             </div>
-            <div id="transcript-container"></div>
-        </div>
         <script src="script.js"></script>
     </body>
 </html>
