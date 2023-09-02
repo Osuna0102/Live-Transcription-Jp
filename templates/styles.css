@@ -26,16 +26,15 @@
 }
 
 #transcript-container {
-    flex-direction: column-reverse; /* Display columns from top to bottom */
     align-items: flex-end; /* Align content to the top right */
     height: 800px;
-    width: 98%;
     color: #bdbdbd;
     padding: 20px;
-    line-height: 1.5; /* Adjust line height as desired */
+    line-height: 1; /* Adjust line height as desired */
     font-family: 'Hiragino Mincho Pro', serif;
     font-size: 18px;
     writing-mode: vertical-rl; /* Change text direction to right-to-left */
+    
 }
 
 .transcript-line {
