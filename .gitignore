@@ -136,3 +136,4 @@ dmypy.json
 sports.db
 main_old_old.py
 templates/players_old.html
+.vercel
