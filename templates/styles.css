@@ -3,7 +3,7 @@
 }
 
 #menu {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.5);
@@ -13,7 +13,8 @@
     font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
     padding: 10px;
 
-}#status {
+}
+#status {
     position: absolute;
     top: 0;
     left: 0;
@@ -40,7 +41,6 @@
 .transcript-line {
     writing-mode: vertical-rl;
     white-space: pre-wrap;    
-    margin: 10%;
-    margin-bottom: 10px;
+
 }
 
