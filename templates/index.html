@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <html>
+    
    <head>
        <title>Live Transcription</title>
        <link rel="stylesheet" type="text/css" href="styles.css">
@@ -12,13 +14,20 @@
                 height: 100vh;
                 margin: 0;
             }
-
+            
+            #wrapper {
+                position: fixed;
+                top: 0.5;
+                right: 0;
+                left: 0;
+                overflow-y: auto;
+            }
             #container {
                 max-width: 1000%;
             }
 
             #transcript-container {
-                overflow-y:visible; /* Enable vertical scrolling */
+                overflow-y:auto; /* Enable vertical scrolling */
                 flex-direction: column-reverse;
                 align-items: left;
             }
@@ -47,12 +56,13 @@
            </span>
        </div>
    </div>
+    <div id="wrapper">
         <div id="container">
-
             <div id="transcript-container">
-
-              </div> 
+                <!-- Your transcript lines here -->
             </div>
+        </div>
+    </div>
         <script src="script.js"></script>
     </body>
 </html>
