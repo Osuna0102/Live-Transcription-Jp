@@ -58,3 +58,5 @@ setInterval(() => {
     const wpm = Math.floor(characterCount / minutes);
     document.querySelector('#wpm').textContent = `WPM: ${wpm}`;
 }, 1000);
+
+

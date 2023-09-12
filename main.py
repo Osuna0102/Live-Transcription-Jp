@@ -7,27 +7,41 @@ from aiohttp import web
 from aiohttp_wsgi import WSGIHandler
 import json
 from typing import Dict, Callable
-
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+from datetime import date
 
 load_dotenv()
-
 app = Flask('aioflask')
-
 dg_client = Deepgram('498c7b7448f02c656e9b7a4aeb85aed5fc0225e3')
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+def store_transcription(transcription):
+    today = date.today().strftime("%Y-%m-%d")
+    doc_ref = db.collection("transcriptions").document(today)
+    doc = doc_ref.get()
+    
+    if doc.exists:
+        doc_ref.update({'transcriptions': firestore.ArrayUnion([transcription])})
+        print("Session: ", today)
+        print("Transcription: ", transcription)
+    else:
+        doc_ref.set({'transcriptions': [transcription]})
+        print("New session created for session:", today)
 
 async def process_audio(fast_socket: web.WebSocketResponse):
     async def get_transcript(data: Dict) -> None:
         if 'channel' in data:
             transcript = data['channel']['alternatives'][0]['transcript']
-
-        
             if transcript:
                 await fast_socket.send_str(transcript)
-            
-            #data recieved on a variable
+                store_transcription(transcript)
+            # data received on a variable
             json_data = json.dumps(data, ensure_ascii=False).encode('utf-8').decode('utf-8')
-            #print(json_data)
-
+            # print(json_data)
             if 'alternatives' in data['channel'] and data['channel']['alternatives']:
                 confidence = data['channel']['alternatives'][0]['confidence']
                 if 'words' in data['channel']['alternatives'][0] and data['channel']['alternatives'][0]['words']:
@@ -43,15 +57,13 @@ async def process_audio(fast_socket: web.WebSocketResponse):
                 print("No alternatives found in the JSON data.")
 
     deepgram_socket = await connect_to_deepgram(get_transcript)
-
     return deepgram_socket
 
 async def connect_to_deepgram(transcript_received_handler: Callable[[Dict], None]) -> str:
     try:
-        socket = await dg_client.transcription.live({'punctuate': True,'diarize': True,'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'ja'})
+        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'ja'})
         socket.registerHandler(socket.event.CLOSE, lambda c: print(f'Connection closed with code {c}.'))
         socket.registerHandler(socket.event.TRANSCRIPT_RECEIVED, transcript_received_handler)
-
         return socket
     except Exception as e:
         raise Exception(f'Could not open socket: {e}')
@@ -63,18 +75,14 @@ def index():
 async def socket(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request) 
-
     deepgram_socket = await process_audio(ws)
-
     while True:
         data = await ws.receive_bytes()
         deepgram_socket.send(data)
 
-  
-
 if __name__ == "__main__":
-       aio_app = web.Application()
-       wsgi = WSGIHandler(app)
-       aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
-       aio_app.router.add_route('GET', '/listen', socket)
-       asyncio.run(web.run_app(aio_app, port=5555))
+    aio_app = web.Application()
+    wsgi = WSGIHandler(app)
+    aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
+    aio_app.router.add_route('GET', '/listen', socket)
+    asyncio.run(web.run_app(aio_app, port=5555))

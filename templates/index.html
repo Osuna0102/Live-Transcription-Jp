@@ -4,7 +4,9 @@
     
    <head>
        <title>Live Transcription</title>
+
        <link rel="stylesheet" type="text/css" href="styles.css">
+
        <style>
             body {
                 background-color: rgba(0, 0, 0, 0.85);
@@ -45,17 +47,19 @@
 
    <div id="menu">
        <div style="text-align: right;">
-           <span title="Click to pause timer" class="menuitem" style="margin-right: 0.5em; display: inline-block;">
-               <div id="timer"></div>
-           </span>
-           <span title="Total characters" style="display: inline;">
-               <div id="counter"></div>
-           </span>        
-           <span title="Words per minute" style="display: inline;">
-               <div id="wpm"></div>
-           </span>
-       </div>
-   </div>
+                <span title="Click to pause timer" class="menuitem" style="margin-right: 0.5em; display: inline-block;">
+                    <div id="timer"></div>
+                </span>
+                <span title="Total characters" style="display: inline;">
+                    <div id="counter"></div>
+                </span>        
+                <span title="Words per minute" style="display: inline;">
+                    <div id="wpm"></div>
+                </span>
+                <span >
+                </span>
+        </div>
+    </div>
     <div id="wrapper">
         <div id="container">
             <div id="transcript-container">
@@ -63,6 +67,8 @@
             </div>
         </div>
     </div>
+        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
         <script src="script.js"></script>
     </body>
 </html>

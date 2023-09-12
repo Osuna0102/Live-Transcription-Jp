@@ -1,0 +1,18 @@
+{
+  "name": "live-transcription-flask",
+  "version": "1.0.0",
+  "description": "This is a modified version with additional features of deepgrams base python flask public repository!\r The objective of this application is to help measure the amount of output a user does when studying a lenguage. (In this case, japanese)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "firebase-admin": "^11.10.1",
+    "jquery": "^3.7.1",
+    "kuromoji": "^0.1.2"
+  }
+}
