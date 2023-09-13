@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Document Display</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <style>
+
+        
+        body {
+            background-color: rgba(0, 0, 0, 0.85);
+            font-family: Arial, sans-serif;
+        }
+        .document {
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .document h3 {
+            margin-top: 0;
+        }
+        .document p {
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+
+        #wrapper {
+                position: fixed;
+                top: 100;
+                right: 0;
+                left: 0;
+                overflow-y: auto;
+                
+            }
+    </style>
+</head>
+<body>
+    <p id="status">Documents</p>
+
+    <div id="menu">
+        <div style="text-align: right;">
+
+                 <button id="fetchDataButton">Fetch Data</button>
+                 </span>        
+                 <button id="displayDataButton">Display Data</button>
+                 </span>
+                 <span >
+                 </span>
+     </div>
+     <div id="wrapper">
+        <div id="container">
+            <div id="transcript-container">
+                <!-- Your transcript lines here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+    <script>
+       // For Firebase JS SDK v7.20.0 and later, measurementId is optional 
+       const firebaseConfig = { 
+            apiKey: "AIzaSyBC9XGaTkeWyxUNJlwXVpN2VUsBQVbGTG8", 
+            authDomain: "live-transcription-jp.firebaseapp.com", 
+            projectId: "live-transcription-jp", 
+            storageBucket: "live-transcription-jp.appspot.com", 
+            messagingSenderId: "19034640343", 
+            appId: "1:19034640343:web:f863080047f2f24a2ac592", 
+            measurementId: "G-KREXW421PY" 
+        }; 
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function fetchData() {
+    return db.collection('transcriptions').get()
+        .then((snapshot) => {
+            const fetchedData = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const documentName = doc.id; // Access the document name using doc.id
+                fetchedData.push({ documentName, ...data }); // Include the document name in the fetched data
+            });
+            return fetchedData;
+        });
+}
+
+function displayData(data) {
+    const container = document.querySelector('#transcript-container');
+    container.innerHTML = ''; // Clear previous data
+    const indexList = document.createElement('ul');
+    indexList.className = 'index-list';
+    data.forEach((doc, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = doc.documentName; // Use doc.documentName to display the document name
+        listItem.addEventListener('click', () => {
+            displayDocument(data, index);
+        });
+        indexList.appendChild(listItem);
+    });
+    container.appendChild(indexList);
+}
+
+function displayDocument(data, index) {
+    const container = document.querySelector('#transcript-container');
+    container.innerHTML = ''; // Clear previous data
+    const documentElement = document.createElement('div');
+    documentElement.className = 'document';
+    const documentNameElement = document.createElement('h3');
+    documentNameElement.textContent = data[index].documentName; // Display the document name
+    documentElement.appendChild(documentNameElement);
+    data[index].transcriptions.forEach((item) => {
+        const contentElement = document.createElement('p');
+        contentElement.textContent = item;
+        documentElement.appendChild(contentElement);
+    });
+    container.appendChild(documentElement);
+}
+
+        const fetchDataButton = document.querySelector('#fetchDataButton');
+        const displayDataButton = document.querySelector('#displayDataButton');
+
+        fetchDataButton.addEventListener('click', () => {
+            fetchData()
+                .then((data) => {
+                    console.log('Data fetched:', data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+
+        displayDataButton.addEventListener('click', () => {
+    fetchData()
+        .then((data) => {
+            displayData(data);
+        })
+        .catch((error) => {
+            console.error('Error displaying data:', error);
+        });
+});
+    </script>
+</body>
+</html>
+
+
