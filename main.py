@@ -19,66 +19,69 @@ cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-def store_transcription(transcription):
-    today = date.today().strftime("%Y-%m-%d")
-    doc_ref = db.collection("transcriptions").document(today)
-    doc = doc_ref.get()
-    
-    if doc.exists:
-        doc_ref.update({'transcriptions': firestore.ArrayUnion([transcription])})
-        print("Session: ", today)
-        print("Transcription: ", transcription)
-    else:
-        doc_ref.set({'transcriptions': [transcription]})
-        print("New session created for session:", today)
-
-async def process_audio(fast_socket: web.WebSocketResponse):
-    async def get_transcript(data: Dict) -> None:
-        if 'channel' in data:
-            transcript = data['channel']['alternatives'][0]['transcript']
-            if transcript:
-                await fast_socket.send_str(transcript)
-                store_transcription(transcript)
-            # data received on a variable
-            json_data = json.dumps(data, ensure_ascii=False).encode('utf-8').decode('utf-8')
-            # print(json_data)
-            if 'alternatives' in data['channel'] and data['channel']['alternatives']:
-                confidence = data['channel']['alternatives'][0]['confidence']
-                if 'words' in data['channel']['alternatives'][0] and data['channel']['alternatives'][0]['words']:
-                    start = data['channel']['alternatives'][0]['words'][0]['start']
-                    end = data['channel']['alternatives'][0]['words'][0]['end']
-                    # Print values
-                    print(f"Confidence: {confidence}")
-                    print(f"Start: {start}")
-                    print(f"End: {end}")
-                else:
-                    print("")
-            else:
-                print("No alternatives found in the JSON data.")
-
-    deepgram_socket = await connect_to_deepgram(get_transcript)
-    return deepgram_socket
-
-async def connect_to_deepgram(transcript_received_handler: Callable[[Dict], None]) -> str:
-    try:
-        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'ja'})
-        socket.registerHandler(socket.event.CLOSE, lambda c: print(f'Connection closed with code {c}.'))
-        socket.registerHandler(socket.event.TRANSCRIPT_RECEIVED, transcript_received_handler)
-        return socket
-    except Exception as e:
-        raise Exception(f'Could not open socket: {e}')
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
 async def socket(request):
     ws = web.WebSocketResponse()
-    await ws.prepare(request) 
-    deepgram_socket = await process_audio(ws)
-    while True:
-        data = await ws.receive_bytes()
-        deepgram_socket.send(data)
+    await ws.prepare(request)
+
+    today = date.today().strftime("%Y-%m-%d")
+    transcription_doc_ref = db.collection("transcriptions").document(today)
+    data_collection_ref = db.collection("Data").document(today)
+    transcription_doc = transcription_doc_ref.get()
+
+    if not transcription_doc.exists:
+        transcription_doc_ref.set({'transcriptions': []})
+        transcription_doc = transcription_doc_ref.get()
+
+    async def get_transcript(data: Dict) -> None:
+        if 'channel' in data:
+            transcript = data['channel']['alternatives'][0]['transcript']
+            if transcript:
+                await ws.send_str(transcript)
+                if 'alternatives' in data['channel'] and data['channel']['alternatives']:
+                    confidence = data['channel']['alternatives'][0]['confidence']
+                    if 'words' in data['channel']['alternatives'][0] and data['channel']['alternatives'][0]['words']:
+                        start = data['channel']['alternatives'][0]['words'][0]['start']
+                        end = data['channel']['alternatives'][0]['words'][0]['end']
+                        transcription_doc_data = transcription_doc.to_dict().get('transcriptions', [])
+                        transcription_doc_data.append(transcript)
+                        transcription_doc_ref.update({'transcriptions': firestore.ArrayUnion([transcript])})
+                        if not data_collection_ref.get().exists:
+                            data_collection_ref.set({
+                                'start': [start],
+                                'end': [end],
+                                'confidence': [confidence],
+                            })
+                        else:
+                            data_collection_ref.update({
+                                'start': firestore.ArrayUnion([start]),
+                                'end': firestore.ArrayUnion([end]),
+                                'confidence': firestore.ArrayUnion([confidence]),
+                            })
+                        print("Session:", today)
+                        print("Transcription:", transcript)
+                        print("Start:", start)
+                        print("End:", end)
+                        print("Confidence:", confidence)
+                    else:
+                        print("")
+                else:
+                    print("No alternatives found in the JSON data.")
+
+    try:
+        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'ja'})
+        socket.registerHandler(socket.event.CLOSE, lambda c: print(f'Connection closed with code {c}.'))
+        socket.registerHandler(socket.event.TRANSCRIPT_RECEIVED, get_transcript)
+
+        while True:
+            data = await ws.receive_bytes()
+            socket.send(data)
+
+    except Exception as e:
+        print(f"Error connecting to Deepgram: {e}")
 
 if __name__ == "__main__":
     aio_app = web.Application()
