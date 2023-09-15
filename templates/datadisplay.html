@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Display</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <style>
+
+        
+        body {
+            background-color: rgba(0, 0, 0, 0.85);
+            font-family: Arial, sans-serif;
+        }
+        .document {
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .document h3 {
+            margin-top: 0;
+        }
+        .document p {
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+
+        #wrapper {
+                position: fixed;
+                top: 100;
+                right: 0;
+                left: 0;
+                overflow-y: auto;
+                
+            }
+    </style>
+</head>
+<body>
+    <p id="status">Documents</p>
+
+    <div id="menu">
+        <div style="text-align: right;">
+            <button id="extend-button" onclick="toggleCascade()">Extend</button>
+            <div id="cascade-menu" style="display: none;">
+                <button><a href="http://127.0.0.1:5500/templates/index.html">Index</a></button>
+                <button><a href="http://127.0.0.1:5500/templates/docdisplay.html">Docs</a></button>
+                <script src="script.js"></script>
+
+            </div>
+                 <button id="fetchDataButton">Fetch Data</button>
+                 </span>        
+                 <button id="displayDataButton">Display Data</button>
+                 </span>
+                 <span >
+                 </span>
+     </div>
+     <div id="wrapper">
+        <div id="container">
+            <div id="transcript-container">
+                <!-- Your transcript lines here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+       // For Firebase JS SDK v7.20.0 and later, measurementId is optional 
+       const firebaseConfig = { 
+            apiKey: "AIzaSyBC9XGaTkeWyxUNJlwXVpN2VUsBQVbGTG8", 
+            authDomain: "live-transcription-jp.firebaseapp.com", 
+            projectId: "live-transcription-jp", 
+            storageBucket: "live-transcription-jp.appspot.com", 
+            messagingSenderId: "19034640343", 
+            appId: "1:19034640343:web:f863080047f2f24a2ac592", 
+            measurementId: "G-KREXW421PY" 
+        }; 
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function fetchData() {
+    return db.collection('Data').get()
+        .then((snapshot) => {
+            const fetchedData = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const documentName = doc.id; // Access the document name using doc.id
+                fetchedData.push({ documentName, ...data }); // Include the document name in the fetched data
+            });
+            return fetchedData;
+        });
+}
+
+function displayData(data) {
+    const container = document.querySelector('#transcript-container');
+    container.innerHTML = ''; // Clear previous data
+    const indexList = document.createElement('ul');
+    indexList.className = 'index-list';
+    data.forEach((doc, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = doc.documentName; // Use doc.documentName to display the document name
+        listItem.addEventListener('click', () => {
+            displayDocument(data, index);
+        });
+        indexList.appendChild(listItem);
+    });
+    container.appendChild(indexList);
+}
+
+function displayDocument(data, index) {
+    const container = document.querySelector('#transcript-container');
+    container.innerHTML = ''; // Clear previous data
+    const documentElement = document.createElement('div');
+    documentElement.className = 'document';
+    const documentNameElement = document.createElement('h3');
+    documentNameElement.textContent = data[index].documentName; // Display the document name
+    documentElement.appendChild(documentNameElement);
+
+    const canvasElement = document.createElement('canvas');
+    canvasElement.id = `graph-${index}`;
+    documentElement.appendChild(canvasElement);
+
+    container.appendChild(documentElement);
+
+    const ctx = canvasElement.getContext('2d');
+    const startAverage = calculateAverage(data[index].start);
+    const endAverage = calculateAverage(data[index].end);
+    const confidenceAverage = calculateAverage(data[index].confidence);
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data[index].end.map((_, i) => i + 1), // Use index as labels
+            datasets: [
+                {
+                    label: 'Start',
+                    data: data[index].start,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    fill: false
+                },
+                {
+                    label: 'End',
+                    data: data[index].end,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    fill: false
+                },
+                {
+                    label: 'Confidence',
+                    data: data[index].confidence,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                },
+                {
+                    label: 'Start Average',
+                    data: Array(data[index].start.length).fill(startAverage),
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    borderDash: [5, 5],
+                    fill: false
+                },
+                {
+                    label: 'End Average',
+                    data: Array(data[index].end.length).fill(endAverage),
+                    borderColor: 'rgba(54, 162, 235, 0.5)',
+                    borderDash: [5, 5],
+                    fill: false
+                },
+                {
+                    label: 'Confidence Average',
+                    data: Array(data[index].confidence.length).fill(confidenceAverage),
+                    borderColor: 'rgba(75, 192, 192, 0.5)',
+                    borderDash: [5, 5],
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Index'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Value'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function calculateAverage(data) {
+    const sum = data.reduce((acc, val) => acc + val, 0);
+    return sum / data.length;
+}
+
+        const fetchDataButton = document.querySelector('#fetchDataButton');
+        const displayDataButton = document.querySelector('#displayDataButton');
+
+        fetchDataButton.addEventListener('click', () => {
+            fetchData()
+                .then((data) => {
+                    console.log('Data fetched:', data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+
+        displayDataButton.addEventListener('click', () => {
+    fetchData()
+        .then((data) => {
+            displayData(data);
+        })
+        .catch((error) => {
+            console.error('Error displaying data:', error);
+        });
+});
+    </script>
+</body>
+</html>
+
+
