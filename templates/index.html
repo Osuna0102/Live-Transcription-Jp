@@ -1,64 +1,60 @@
 <!DOCTYPE html>
-
 <html>
-    
-   <head>
-       <title>Live Transcription</title>
-
-       <link rel="stylesheet" type="text/css" href="styles.css">
-
-       <style>
-            body {
-                background-color: rgba(0, 0, 0, 0.85);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                height: 100vh;
-                margin: 0;
-            }
-            
-            #wrapper {
-                position: fixed;
-                top: 0.5;
-                right: 0;
-                left: 0;
-                overflow-y: auto;
-            }
-            #container {
-                max-width: 1000%;
-            }
-
-            #transcript-container {
-                overflow-y:auto; /* Enable vertical scrolling */
-                flex-direction: column-reverse;
-                align-items: left;
-            }
-
-            .transcript-line {
-                border: 1px solid #ddd;
-                padding: 10px;
-                margin: 10px 0;
-                border-radius: 10px;
-            }
-       </style>
-   </head>
-   <body>
-   <p id="status">Connection status will go here</p>
-
-   <div id="menu">
-       <div style="text-align: right;">
-                <span title="Click to pause timer" class="menuitem" style="margin-right: 0.5em; display: inline-block;">
-                    <div id="timer"></div>
-                </span>
-                <span title="Total characters" style="display: inline;">
-                    <div id="counter"></div>
-                </span>        
-                <span title="Words per minute" style="display: inline;">
-                    <div id="wpm"></div>
-                </span>
-                <span >
-                </span>
+<head>
+    <title>Live Transcription</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #wrapper {
+            position: fixed;
+            top: 0.5;
+            right: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+        #container {
+            max-width: 1000%;
+        }
+        #transcript-container {
+            overflow-y: auto; /* Enable vertical scrolling */
+            flex-direction: column-reverse;
+            align-items: left;
+        }
+        .transcript-line {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <p id="status">Connection status will go here</p>
+    <div id="menu">
+        <button id="extend-button" onclick="toggleCascade()">Extend</button>
+        <div id="cascade-menu" style="display: none;">
+            <button><a href="http://127.0.0.1:5500/templates/docdisplay.html">Docs</a></button>
+            <button><a href="http://127.0.0.1:5500/templates/datadisplay.html">Graphs</a></button>
         </div>
+        <div style="text-align: right;">
+        <span title="Total characters" style="display: inline;">
+            <div id="counter"></div>
+        </span>
+        <span title="Click to pause timer" class="menuitem" style="margin-right: 0.5em; display: inline-block;">
+            <div id="timer"></div>
+        </span>
+        <span title="Words per minute" style="display: inline;">
+            <div id="wpm"></div>
+        </span>
+    </div>
+
     </div>
     <div id="wrapper">
         <div id="container">
@@ -67,8 +63,42 @@
             </div>
         </div>
     </div>
-        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
-        <script src="script.js"></script>
-    </body>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+    <script src="script.js"></script>
+
+<script>
+    let startTime = Date.now();
+    let wordCount = 0;
+
+    // Timer
+    setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        document.querySelector('#timer').textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+
+    // Word Counter
+    setInterval(() => {
+        const transcript = document.querySelector('#transcript-container');
+        const text = transcript.textContent.trim();
+        const characterCount = text.length;
+        document.querySelector('#counter').textContent = `Characters: ${characterCount}`;
+    }, 1000);
+
+    // Words per Minute
+    setInterval(() => {
+        const transcript = document.querySelector('#transcript-container');
+        const text = transcript.textContent.trim();
+        const characterCount = text.length;
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const minutes = elapsed / 60;
+        const wpm = Math.floor(characterCount / minutes);
+        document.querySelector('#wpm').textContent = `WPM: ${wpm}`;
+    }, 1000);
+
+</script>
+    
+</body>
 </html>

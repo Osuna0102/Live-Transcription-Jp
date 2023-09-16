@@ -65,7 +65,9 @@ async def socket(request):
                         print("Transcription:", transcript)
                         print("Start:", start)
                         print("End:", end)
-                        print("Confidence:", confidence)
+                        print("Confidence:", confidence)                        
+                        print("-----------------------------")
+
                     else:
                         print("")
                 else:
