@@ -1,31 +1,38 @@
 navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-    if (!MediaRecorder.isTypeSupported('audio/webm'))
-        return alert('Browser not supported')
-    const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm',
-    })
-    const socket = new WebSocket('ws://localhost:5555/listen')
-    const transcriptContainer = document.querySelector('#transcript-container');
-
-    socket.onopen = () => {
-        document.querySelector('#status').textContent = 'Status: Connected'
-        mediaRecorder.addEventListener('dataavailable', async (event) => {
-            if (event.data.size > 0 && socket.readyState == 1) {
-                socket.send(event.data)
-            }
-        })
-        mediaRecorder.start(250)
+    if (!MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+      return alert('Browser not supported');
     }
-    socket.onmessage = async (message) => {
-        const received = message.data;
-        if (received) {
-            const transcriptLine = document.createElement('p');
-            transcriptLine.className = 'transcript-line';
-            transcriptLine.textContent = received; // Set the received data as the text content of the new transcript line
-            transcriptContainer.appendChild(transcriptLine); // Append the new transcript line to the container
+    
+    const mediaRecorder = new MediaRecorder(stream, {
+      mimeType: 'audio/webm;codecs=opus',
+    });
+    
+    const transcriptContainer = document.querySelector('#transcript-container');
+    
+    const socket = new WebSocket('ws://localhost:5555/listen');
+    
+    socket.onopen = () => {
+      document.querySelector('#status').textContent = 'Status: Connected';
+      mediaRecorder.addEventListener('dataavailable', async (event) => {
+        if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
+          socket.send(event.data);
         }
+      });
+      mediaRecorder.start(250);
     };
-})
+    
+    socket.onmessage = async (message) => {
+      const received = message.data;
+      if (received) {
+        const transcriptLine = document.createElement('p');
+        transcriptLine.className = 'transcript-line';
+        transcriptLine.textContent = received;
+        transcriptContainer.appendChild(transcriptLine);
+      }
+    };
+  }).catch((error) => {
+    console.error('Error accessing microphone:', error);
+  });
 
 function toggleCascade() {
     const cascadeMenu = document.querySelector('#cascade-menu');
