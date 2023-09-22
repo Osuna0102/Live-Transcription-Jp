@@ -1,1 +1,0 @@
-web: gunicorn main:aio_app
