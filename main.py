@@ -1,22 +1,17 @@
 from flask import Flask, render_template
 from deepgram import Deepgram
-from dotenv import load_dotenv
 import os
 import asyncio
 from aiohttp import web
 from aiohttp_wsgi import WSGIHandler
 import json
-from typing import Dict, Callable
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+from firebase_admin import credentials, firestore, initialize_app
 from datetime import date
 
-load_dotenv()
 app = Flask('aioflask')
 dg_client = Deepgram('498c7b7448f02c656e9b7a4aeb85aed5fc0225e3')
 cred = credentials.Certificate("serviceAccountKey.json")
-firebase_admin.initialize_app(cred)
+initialize_app(cred)
 db = firestore.client()
 
 @app.route('/')
@@ -26,17 +21,15 @@ def index():
 async def socket(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
-
     today = date.today().strftime("%Y-%m-%d")
     transcription_doc_ref = db.collection("transcriptions").document(today)
     data_collection_ref = db.collection("Data").document(today)
     transcription_doc = transcription_doc_ref.get()
-
     if not transcription_doc.exists:
         transcription_doc_ref.set({'transcriptions': []})
         transcription_doc = transcription_doc_ref.get()
 
-    async def get_transcript(data: Dict) -> None:
+    async def get_transcript(data):
         if 'channel' in data:
             transcript = data['channel']['alternatives'][0]['transcript']
             if transcript:
@@ -65,29 +58,26 @@ async def socket(request):
                         print("Transcription:", transcript)
                         print("Start:", start)
                         print("End:", end)
-                        print("Confidence:", confidence)                        
+                        print("Confidence:", confidence)
                         print("-----------------------------")
-
                     else:
                         print("")
                 else:
                     print("No alternatives found in the JSON data.")
 
     try:
-        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'ja'})
+        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'en'})
         socket.registerHandler(socket.event.CLOSE, lambda c: print(f'Connection closed with code {c}.'))
         socket.registerHandler(socket.event.TRANSCRIPT_RECEIVED, get_transcript)
-
         while True:
             data = await ws.receive_bytes()
             socket.send(data)
-
     except Exception as e:
         print(f"Error connecting to Deepgram: {e}")
 
-if __name__ == "__main__":
+if __name__ == "__main__" or os.environ.get("APP_ENV") == "heroku":
     aio_app = web.Application()
     wsgi = WSGIHandler(app)
     aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
-    aio_app.router.add_route('GET', '/listen', socket)
-    asyncio.run(web.run_app(aio_app, port=5555))
+    aio_app.router.add_route('GET', '/transcribe', socket)
+    web.run_app(aio_app, port=int(os.environ.get("PORT", 5000)))
