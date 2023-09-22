@@ -80,4 +80,4 @@ if __name__ == "__main__" or os.environ.get("APP_ENV") == "heroku":
     wsgi = WSGIHandler(app)
     aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
     aio_app.router.add_route('GET', '/transcribe', socket)
-    web.run_app(aio_app, port=int(os.environ.get("PORT", 5000)))
+    web.run_app(aio_app, port=int(os.environ.get("PORT", 5555)))
