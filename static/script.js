@@ -34,65 +34,60 @@ function toggleCascade() {
 
 
 
-  // Define variables for audio context and microphone stream
+// Define variables for audio context and microphone stream
 let audioContext;
 let microphoneStream;
 
 // Function to start the microphone
 function startMicrophone() {
-    // Check if the browser supports the Web Audio API
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        console.error('Web Audio API is not supported in this browser.');
-        return;
-    }
-
-    // Create an audio context
-    audioContext = new AudioContext();
-
-    // Get user media (microphone)
-    navigator.mediaDevices
-        .getUserMedia({ audio: true })
-        .then(function (stream) {
-            // Save the microphone stream
-            microphoneStream = stream;
-
-            // Connect the microphone stream to the audio context
-            const microphoneInput = audioContext.createMediaStreamSource(stream);
-            microphoneInput.connect(audioContext.destination);
-        })
-        .catch(function (error) {
-            console.error('Error accessing microphone:', error);
-        });
+  // Check if the browser supports the Web Audio API
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    console.error('Web Audio API is not supported in this browser.');
+    return;
+  }
+  // Create an audio context
+  audioContext = new AudioContext();
+  // Get user media (microphone)
+  navigator.mediaDevices
+    .getUserMedia({ audio: true })
+    .then(function (stream) {
+      // Save the microphone stream
+      microphoneStream = stream;
+      // Connect the microphone stream to the audio context
+      const microphoneInput = audioContext.createMediaStreamSource(stream);
+      microphoneInput.connect(audioContext.destination);
+    })
+    .catch(function (error) {
+      console.error('Error accessing microphone:', error);
+    });
 }
 
 // Function to stop the microphone
 function stopMicrophone() {
-    if (microphoneStream) {
-        // Stop the microphone stream and close the audio context
-        microphoneStream.getTracks().forEach(function (track) {
-            track.stop();
-        });
-        audioContext.close().then(function () {
-            audioContext = null;
-        });
-    }
+  if (microphoneStream) {
+    // Stop the microphone stream and close the audio context
+    microphoneStream.getTracks().forEach(function (track) {
+      track.stop();
+    });
+    audioContext.close().then(function () {
+      audioContext = null;
+    });
+  }
 }
 
 // Toggle microphone state when clicking a button
 const toggleMicrophoneButton = document.querySelector('#toggleMicrophoneButton');
 let isMicrophoneMuted = false;
-
 toggleMicrophoneButton.addEventListener('click', function () {
-    if (isMicrophoneMuted) {
-        // If the microphone is muted, start it
-        startMicrophone();
-        toggleMicrophoneButton.textContent = 'Mute Microphone';
-    } else {
-        // If the microphone is not muted, stop it
-        stopMicrophone();
-        toggleMicrophoneButton.textContent = 'Unmute Microphone';
-    }
-
-    // Toggle the microphone state
-    isMicrophoneMuted = !isMicrophoneMuted;
+  if (isMicrophoneMuted) {
+    // If the microphone is muted, start it
+    startMicrophone();
+    toggleMicrophoneButton.textContent = 'Mute Microphone';
+  } else {
+    // If the microphone is not muted, stop it
+    stopMicrophone();
+    toggleMicrophoneButton.textContent = 'Unmute Microphone';
+  }
+  // Toggle the microphone state
+  isMicrophoneMuted = !isMicrophoneMuted;
 });
