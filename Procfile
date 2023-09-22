@@ -1,1 +1,1 @@
-web: gunicorn aioflask:app
+web: gunicorn app:app
