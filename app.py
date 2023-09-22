@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from deepgram import Deepgram
 import os
 import asyncio
-from aiohttp import web
+from aiohttp import web, WSMsgType
 from aiohttp_wsgi import WSGIHandler
 import json
 from firebase_admin import credentials, firestore, initialize_app
@@ -16,7 +16,6 @@ db = firestore.client()
 
 @app.route('/')
 def index():
-    #return ('Hello worldddddd!!!')   
     return render_template('index.html')
 
 async def socket(request):
@@ -70,9 +69,12 @@ async def socket(request):
         socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'en'})
         socket.registerHandler(socket.event.CLOSE, lambda c: print(f'Connection closed with code {c}.'))
         socket.registerHandler(socket.event.TRANSCRIPT_RECEIVED, get_transcript)
-        while True:
-            data = await ws.receive_bytes()
-            socket.send(data)
+        async for msg in ws:
+            if msg.type == WSMsgType.TEXT:
+                if msg.data == 'close':
+                    await ws.close()
+            elif msg.type == WSMsgType.ERROR:
+                print(f'WebSocket Error: {ws.exception()}')
     except Exception as e:
         print(f"Error connecting to Deepgram: {e}")
 
