@@ -16,7 +16,8 @@ db = firestore.client()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return ('Hello worlddddd')   
+    #return render_template('index.html')
 
 async def socket(request):
     ws = web.WebSocketResponse()
