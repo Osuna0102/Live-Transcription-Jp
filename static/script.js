@@ -4,8 +4,8 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm',
     })
-    const socket = new WebSocket('wss://litrans-64d8c6ef00bd.herokuapp.com/transcribe');
-        //const socket = new WebSocket('ws://localhost:5555/listen')
+    //onst socket = new WebSocket('wss://litrans-64d8c6ef00bd.herokuapp.com/transcribe');
+    //const socket = new WebSocket('ws://localhost:5555/listen')
     const transcriptContainer = document.querySelector('#transcript-container');
 
     socket.onopen = () => {
