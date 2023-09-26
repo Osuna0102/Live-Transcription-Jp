@@ -11,31 +11,25 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import date
-
 load_dotenv()
 app = Flask('aioflask')
 dg_client = Deepgram('498c7b7448f02c656e9b7a4aeb85aed5fc0225e3')
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
-
 @app.route('/')
 def index():
     return render_template('index.html')
-
 async def socket(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
-
     today = date.today().strftime("%Y-%m-%d")
     transcription_doc_ref = db.collection("transcriptions").document(today)
     data_collection_ref = db.collection("Data").document(today)
     transcription_doc = transcription_doc_ref.get()
-
     if not transcription_doc.exists:
         transcription_doc_ref.set({'transcriptions': []})
         transcription_doc = transcription_doc_ref.get()
-
     async def get_transcript(data: Dict) -> None:
         if 'channel' in data:
             transcript = data['channel']['alternatives'][0]['transcript']
@@ -65,29 +59,24 @@ async def socket(request):
                         print("Transcription:", transcript)
                         print("Start:", start)
                         print("End:", end)
-                        print("Confidence:", confidence)                        
+                        print("Confidence:", confidence)
                         print("-----------------------------")
-
                     else:
                         print("")
                 else:
                     print("No alternatives found in the JSON data.")
-
     try:
-        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'ja'})
+        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'en'})  # Set the default language to English
         socket.registerHandler(socket.event.CLOSE, lambda c: print(f'Connection closed with code {c}.'))
         socket.registerHandler(socket.event.TRANSCRIPT_RECEIVED, get_transcript)
-
         while True:
             data = await ws.receive_bytes()
-            socket.send(data)
-
+            await socket.send(data)  # Use 'await' to send data asynchronously
     except Exception as e:
         print(f"Error connecting to Deepgram: {e}")
-
 if __name__ == "__main__":
     aio_app = web.Application()
     wsgi = WSGIHandler(app)
     aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
     aio_app.router.add_route('GET', '/listen', socket)
-    asyncio.run(web.run_app(aio_app, port=5555))
+    web.run_app(aio_app, port=5555)  # Remove the 'asyncio.run()' call

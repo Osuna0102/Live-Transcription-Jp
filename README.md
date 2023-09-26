@@ -3,8 +3,7 @@
 This is a modified version with additional features of deepgrams base python flask public repository!
 The objective of this application is to help measure the amount of output a user does when studying a lenguage. (In this case, japanese)
 
-To run this project create a virtual environment by running the below commands. You can learn more about setting up a virtual environment in this article.
-
+To run this project create a virtual environment by running the below commands.
 ```
 mkdir [% NAME_OF_YOUR_DIRECTORY %]
 cd [% NAME_OF_YOUR_DIRECTORY %]
