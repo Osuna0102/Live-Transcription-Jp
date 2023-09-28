@@ -4,7 +4,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm',
     })
-    const socket = new WebSocket('wss://livetranscription.onrender.com:5555/listen')
+    const socket = new WebSocket('wss://livetranscription.onrender.com:10000/listen')
     const transcriptContainer = document.querySelector('#transcript-container');
 
     socket.onopen = () => {
