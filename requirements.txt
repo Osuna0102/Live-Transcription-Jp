@@ -18,3 +18,4 @@ python-dotenv==0.19.2
 websockets==10.2
 Werkzeug==2.0.3
 yarl==1.7.2
+gunicorn==21.2.0
