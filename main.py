@@ -12,6 +12,9 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import date
 
+from flask_socketio import SocketIO, emit
+
+
 load_dotenv()
 app = Flask('aioflask')
 dg_client = Deepgram('498c7b7448f02c656e9b7a4aeb85aed5fc0225e3')
@@ -90,4 +93,4 @@ if __name__ == "__main__":
     wsgi = WSGIHandler(app)
     aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
     aio_app.router.add_route('GET', '/listen', socket)
-    asyncio.run(web.run_app(aio_app, port=int(os.environ.get('PORT', 5555))))
+    asyncio.run(web.run_app(aio_app, port=int(os.environ.get('PORT', 443))))
