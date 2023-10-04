@@ -136,41 +136,28 @@ function displayDocument(data, index) {
             labels: data[index].end.map((_, i) => i + 1), // Use index as labels
             datasets: [
                 {
-                    label: 'Start',
-                    data: data[index].start,
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    fill: false
-                },
-                {
-                    label: 'End',
-                    data: data[index].end,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    fill: false
-                },
-                {
                     label: 'Confidence',
                     data: data[index].confidence,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     fill: false
                 },
                 {
-                    label: 'Start Average',
-                    data: Array(data[index].start.length).fill(startAverage),
-                    borderColor: 'rgba(255, 99, 132, 0.5)',
-                    borderDash: [5, 5],
-                    fill: false
-                },
-                {
-                    label: 'End Average',
-                    data: Array(data[index].end.length).fill(endAverage),
-                    borderColor: 'rgba(54, 162, 235, 0.5)',
-                    borderDash: [5, 5],
-                    fill: false
-                },
-                {
                     label: 'Confidence Average',
                     data: Array(data[index].confidence.length).fill(confidenceAverage),
                     borderColor: 'rgba(75, 192, 192, 0.5)',
+                    borderDash: [5, 5],
+                    fill: false
+                },
+                {
+                    label: 'Time talking',
+                    data: data[index].start.map((start, i) => data[index].end[i] - start), // Calculate time talking for each point
+                    borderColor: 'rgba(20, 20, 192, 1)',
+                    fill: false
+                },
+                {
+                    label: 'Average time talking',
+                    data: Array(data[index].end.length).fill(calculateAverage(data[index].end.map((end, i) => end - data[index].start[i]))),
+                    borderColor: 'rgba(20, 20, 192, 0.5)',
                     borderDash: [5, 5],
                     fill: false
                 }

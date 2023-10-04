@@ -66,12 +66,12 @@ async def socket(request):
                 else:
                     print("No alternatives found in the JSON data.")
     try:
-        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'en'})  # Set the default language to English
+        socket = await dg_client.transcription.live({'punctuate': True, 'diarize': True, 'filler_words': True, 'smart_format': True, 'interim_results': False, 'language': 'ja'})  # Set the default language to English
         socket.registerHandler(socket.event.CLOSE, lambda c: print(f'Connection closed with code {c}.'))
         socket.registerHandler(socket.event.TRANSCRIPT_RECEIVED, get_transcript)
         while True:
             data = await ws.receive_bytes()
-            await socket.send(data)  # Use 'await' to send data asynchronously
+            socket.send(data)
     except Exception as e:
         print(f"Error connecting to Deepgram: {e}")
 if __name__ == "__main__":
@@ -79,4 +79,4 @@ if __name__ == "__main__":
     wsgi = WSGIHandler(app)
     aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
     aio_app.router.add_route('GET', '/listen', socket)
-    web.run_app(aio_app, port=5555)  # Remove the 'asyncio.run()' call
+    asyncio.run(web.run_app(aio_app, port=5555))
