@@ -2,15 +2,15 @@
 <html>
 <head>
     <title>Live Transcription</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
 </head>
 <body>
     <p id="status">Connection status will go here</p>
     <div id="menu">
         <button id="extend-button" onclick="toggleCascade()">Extend</button>
         <div id="cascade-menu" style="display: none;">
-            <button><a href="http://127.0.0.1:5500/templates/docdisplay.html">Docs</a></button>
-            <button><a href="http://127.0.0.1:5500/templates/datadisplay.html">Graphs</a></button>
+            <button><a href="/static/docdisplay.html">Docs</a></button>
+            <button><a href="/static/datadisplay.html">Graphs</a></button>
         </div>
         <div style="text-align: right;">
         <span title="Total characters" style="display: inline;">
@@ -34,7 +34,7 @@
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
-    <script src="script.js"></script>
+    <script src="/static/script.js"></script>
 
 </body>
 </html>
