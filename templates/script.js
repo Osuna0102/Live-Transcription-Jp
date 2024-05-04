@@ -35,8 +35,10 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm',
     })
-    const socket = new WebSocket('ws://localhost:5555/listen')
-    const transcriptContainer = document.querySelector('#transcript-container');
+const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const wsUrl = `${wsProtocol}//${window.location.host}/listen`;
+const socket = new WebSocket(wsUrl);
+const transcriptContainer = document.querySelector('#transcript-container');
 
     socket.onopen = () => {
         document.querySelector('#status').textContent = 'Status: Connected'
