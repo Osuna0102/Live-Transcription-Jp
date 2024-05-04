@@ -35,16 +35,15 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm',
     })
-const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-const wsUrl = `${wsProtocol}//${window.location.host}/listen`;
-const socket = new WebSocket(wsUrl);
-const transcriptContainer = document.querySelector('#transcript-container');
+    const socket = new WebSocket('ws://127.0.0.1:8000/listen');
+    const transcriptContainer = document.querySelector('#transcript-container');
 
     socket.onopen = () => {
         document.querySelector('#status').textContent = 'Status: Connected'
         mediaRecorder.addEventListener('dataavailable', async (event) => {
             if (event.data.size > 0 && socket.readyState == 1) {
-                socket.send(event.data)
+                const arrayBuffer = await event.data.arrayBuffer();
+                socket.send(arrayBuffer);
             }
         })
         mediaRecorder.start(250)

@@ -1,28 +1,29 @@
-from flask import Flask, render_template
+from fastapi import FastAPI, WebSocket
 from deepgram import Deepgram
 from dotenv import load_dotenv
 import os
 import asyncio
-from aiohttp import web
-from aiohttp_wsgi import WSGIHandler
 import json
-from typing import Dict, Callable
+from typing import Dict
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import date
+
 load_dotenv()
-app = Flask('aioflask')
+app = FastAPI()
 dg_client = Deepgram('498c7b7448f02c656e9b7a4aeb85aed5fc0225e3')
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
-@app.route('/')
+
+@app.get("/")
 def index():
-    return render_template('index.html')
-async def socket(request):
-    ws = web.WebSocketResponse()
-    await ws.prepare(request)
+    return {"message": "Hello, World!"}
+
+@app.websocket("/listen")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
     today = date.today().strftime("%Y-%m-%d")
     transcription_doc_ref = db.collection("transcriptions").document(today)
     data_collection_ref = db.collection("Data").document(today)
@@ -30,11 +31,12 @@ async def socket(request):
     if not transcription_doc.exists:
         transcription_doc_ref.set({'transcriptions': []})
         transcription_doc = transcription_doc_ref.get()
+
     async def get_transcript(data: Dict) -> None:
         if 'channel' in data:
             transcript = data['channel']['alternatives'][0]['transcript']
             if transcript:
-                await ws.send_str(transcript)
+                await websocket.send_text(transcript)
                 if 'alternatives' in data['channel'] and data['channel']['alternatives']:
                     confidence = data['channel']['alternatives'][0]['confidence']
                     if 'words' in data['channel']['alternatives'][0] and data['channel']['alternatives'][0]['words']:
@@ -70,13 +72,7 @@ async def socket(request):
         socket.registerHandler(socket.event.CLOSE, lambda c: print(f'Connection closed with code {c}.'))
         socket.registerHandler(socket.event.TRANSCRIPT_RECEIVED, get_transcript)
         while True:
-            data = await ws.receive_bytes()
+            data = await websocket.receive_bytes()
             socket.send(data)
     except Exception as e:
         print(f"Error connecting to Deepgram: {e}")
-if __name__ == "__main__":
-    aio_app = web.Application()
-    wsgi = WSGIHandler(app)
-    aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
-    aio_app.router.add_route('GET', '/listen', socket)
-    web.run_app(aio_app, port=5555)

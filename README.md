@@ -7,8 +7,8 @@ To run this project create a virtual environment by running the below commands.
 ```
 mkdir [% NAME_OF_YOUR_DIRECTORY %]
 cd [% NAME_OF_YOUR_DIRECTORY %]
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv venv OR py -m venv venv
+source venv/bin/activate OR .\venv\Scripts\activate
 ```
 
 Make sure your virtual environment is activated and install the dependencies in the requirements.txt file inside.
@@ -17,6 +17,7 @@ Make sure your virtual environment is activated and install the dependencies in 
 
 Make sure you're in the directory with the main.py file and run the project in the development server.
 
+'uvicorn main:app --reload'
 `python main.py`
 
 Pull up a browser and go to your localhost, `http://127.0.0.1:8000/`.
