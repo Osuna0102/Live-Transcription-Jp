@@ -1,4 +1,6 @@
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from deepgram import Deepgram
 from dotenv import load_dotenv
 import os
@@ -17,9 +19,12 @@ cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+# Mount static files
+app.mount("/static", StaticFiles(directory="templates"), name="static")
+
 @app.get("/")
-def index():
-    return {"message": "Hello, World!"}
+async def index():
+    return FileResponse('templates/index.html')
 
 @app.websocket("/listen")
 async def websocket_endpoint(websocket: WebSocket):
