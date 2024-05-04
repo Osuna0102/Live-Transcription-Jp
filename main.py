@@ -79,4 +79,4 @@ if __name__ == "__main__":
     wsgi = WSGIHandler(app)
     aio_app.router.add_route('*', '/{path_info: *}', wsgi.handle_request)
     aio_app.router.add_route('GET', '/listen', socket)
-    asyncio.run(web.run_app(aio_app, port=5555))
+    web.run_app(aio_app, port=5555)
