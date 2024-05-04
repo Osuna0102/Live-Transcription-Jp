@@ -35,7 +35,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm',
     })
-    const socket = new WebSocket('ws://' + window.location.hostname + ':8000/listen');
+    const socket = new WebSocket('ws://' + window.location.hostname + '/listen');
             const transcriptContainer = document.querySelector('#transcript-container');
 
     socket.onopen = () => {
