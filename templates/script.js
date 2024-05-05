@@ -36,7 +36,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
         mimeType: 'audio/webm',
     })
     const socket = new WebSocket('wss://' + window.location.hostname + '/listen');
-            const transcriptContainer = document.querySelector('#transcript-container');
+    const transcriptContainer = document.querySelector('#transcript-container');
 
     socket.onopen = () => {
         document.querySelector('#status').textContent = 'Status: Connected'

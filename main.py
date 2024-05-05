@@ -1,4 +1,5 @@
 from fastapi import FastAPI, WebSocket, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from deepgram import Deepgram
@@ -21,6 +22,20 @@ db = firestore.client()
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="templates"), name="static")
+
+# Set up CORS
+origins = [
+    "http://localhost:3000",  # Allow localhost for development
+    "https://livetranscription.onrender.com",  # Allow your production site
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def index():
