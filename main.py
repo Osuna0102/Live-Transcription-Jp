@@ -28,6 +28,7 @@ app.mount("/static", StaticFiles(directory="templates"), name="static")
 origins = [
     "http://localhost:3000",  # Allow localhost for development
     "https://livetranscription.onrender.com",  # Allow your production site
+    "http://livetranscription.onrender.com",  # Allow your production site over HTTP
 ]
 
 app.add_middleware(
