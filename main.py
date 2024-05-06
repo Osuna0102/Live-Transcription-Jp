@@ -117,7 +117,7 @@ async def transcript(file: UploadFile = File(...)):
         'model': 'nova-2',
         'smart_format': 'true',
         'diarize': 'true',
-        'language': 'es',
+        'language': 'ja',
     }
 
     # Send the request
