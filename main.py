@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket, HTTPException
+from fastapi import FastAPI, WebSocket, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -12,6 +12,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import date
+import requests
 
 load_dotenv()
 app = FastAPI()
@@ -96,3 +97,58 @@ async def websocket_endpoint(websocket: WebSocket):
             socket.send(data)
     except Exception as e:
         print(f"Error connecting to Deepgram: {e}")
+
+@app.post("/transcript")
+async def transcript(file: UploadFile = File(...)):
+    audio_file = await file.read()
+
+    # API Key
+    api_key = '03414a05e387a8776d9b819cb038a8ec6511c49e'
+
+    # Prepare the headers
+    headers = {
+        'Authorization': 'Token ' + api_key,
+        'Content-Type': file.content_type,
+    }
+
+    # Prepare the query parameters
+    query = {
+        'model': 'nova-2',
+        'smart_format': 'true',
+        'diarize': 'true',
+        'language': 'es',
+    }
+
+    # Send the request
+    response = requests.post('https://api.deepgram.com/v1/listen', params=query, headers=headers, data=audio_file)
+
+    if response.status_code == 200:
+        # Decode the JSON response
+        data = json.loads(response.text)
+
+        # Start output buffering
+        output = []
+
+        # Print the overall confidence
+        output.append("Overall Confidence: " + str(data['results']['channels'][0]['alternatives'][0]['confidence'] * 100) + "%\n")
+
+        # Iterate over the channels
+        for channel in data['results']['channels']:
+            # Iterate over the alternatives
+            for alternative in channel['alternatives']:
+                # Iterate over the paragraphs
+                for paragraph in alternative['paragraphs']['paragraphs']:
+                    # Iterate over the sentences
+                    for sentence in paragraph['sentences']:
+                        # Write the time, speaker, and text to the output buffer
+                        output.append("[" + str(sentence['start']) + "] Speaker " + str(paragraph['speaker']) + ": " + sentence['text'] + "\n")
+
+        # Write the output to a file
+        with open('transcript.txt', 'w') as f:
+            f.writelines(output)
+
+        # Return the file as a download
+        return FileResponse('transcript.txt', filename='transcript.txt', media_type='text/plain')
+
+    else:
+        return {"error": "Failed to transcribe"}, response.status_code
