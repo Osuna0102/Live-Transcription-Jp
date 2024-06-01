@@ -1,0 +1,250 @@
+Overall Confidence: 77.69311%
+[135.66] Speaker 0: For now all my apps are doing my stuff here.
+[140.14] Speaker 0: Tab device secret customer.
+[160.33499] Speaker 0: Insert mysecret is equal to import OS or mysecret is equal to OS dot environment variable use.
+[173.23001] Speaker 0: Open and open API APIs.
+[228.415] Speaker 0: Straightforward Hindi, you can whisper an automatic speech recognition system.
+[304.125] Speaker 0: So I'll just open up and whisper if you don't have the data trained and you can actually Hello.
+[345.65] Speaker 0: My name is Harry, and I am here to tell you about whisper API.
+[349.845] Speaker 0: OpenAI Whisper is an amazing thing, and it is something that you will definitely use if you can understand how powerful it is and how to use it.
+[378.77] Speaker 0: It's called locate.
+[380.61] Speaker 0: I think I can do right click show in folder.
+[384.61] Speaker 0: Yes.
+[384.93] Speaker 0: Recording to.
+[385.88998] Speaker 0: Recording to recording 2.
+[432.25998] Speaker 0: Whisper API.
+[435.13998] Speaker 0: Whisper API.
+[436.18] Speaker 0: I'll come up with whisper search or transcribing audio with whisper.
+[443.315] Speaker 0: So, yeah, these packages are installed.
+[492.425] Speaker 0: Let's see how it performs.
+[494.425] Speaker 0: And we'll open API key.
+[496.50497] Speaker 0: We'll be able to use it.
+[498.13998] Speaker 0: But it says, I'll install Numpy.
+[503.9] Speaker 0: Let me see if it works.
+[506.205] Speaker 0: Looking in indices.
+[511.245] Speaker 0: This should run and by the way open Ffmpeg.
+[564.68] Speaker 0: So let's wait for FFmpeg to install or just use it.
+[587.655] Speaker 0: Or inapplet.nix file, ffmpeg add or download and install.
+[635.01996] Speaker 0: Hello.
+[635.25995] Speaker 0: My name is Adi, and I'm here to tell you about whisper API Open Avisma's amazing thing, and it is something that you will definitely use if you can understand how powerful it is and how to use it.
+[645.79] Speaker 0: Wow.
+[645.87] Speaker 0: This is amazing.
+[646.67] Speaker 0: To use the upload Whisper open API key.
+[648.94196] Speaker 0: Key.
+[648.958] Speaker 0: I'll open API key.
+[680.0] Speaker 0: Import OpenAI.
+[681.60004] Speaker 0: Okay.
+[681.80005] Speaker 0: And then, you can use the audio file.
+[686.0] Speaker 0: Okay.
+[687.12] Speaker 0: That's it.
+[687.52] Speaker 0: The audio.
+[688.08] Speaker 0: Mp3 API is equal to OS.getenvor open AI key.
+[736.38] Speaker 0: Or I think, I think this should be good.
+[738.7] Speaker 0: So here we go, we can use open ai.
+[742.82495] Speaker 0: Apikey is equal to os.getenv.
+[746.26495] Speaker 0: Oops.
+[746.58496] Speaker 0: I'm gonna use open ai.
+[750.28] Speaker 0: Openai.apikey is equal to west.getenvopenai key.
+[798.87] Speaker 0: OpenAI whisper is an amazing thing and it is something that you will definitely use.
+[802.87] Speaker 0: You can understand how powerful it is and how to use it.
+[805.97504] Speaker 0: Oh my god.
+[806.615] Speaker 0: This is exactly accurate.
+[807.97504] Speaker 0: I'm not gonna whisper this.
+[809.655] Speaker 0: I'm gonna use my name is Alice Lee.
+[813.495] Speaker 0: The other side is if I'm not, if I'm not wrong.
+[838.005] Speaker 0: Translate English.
+[846.01] Speaker 0: Translate English.
+[847.29004] Speaker 0: Let's try this out.
+[848.09] Speaker 0: I can audio record.
+[858.615] Speaker 0: That's it.
+[859.09503] Speaker 0: Many recording to save it.
+[860.935] Speaker 0: Show in folder.
+[865.09] Speaker 0: And instead of saying audio.mp3 one model.
+[913.515] Speaker 0: This is really very impressive.
+[914.875] Speaker 0: Yeah.
+[915.03503] Speaker 0: This is really very impressive.
+[943.075] Speaker 0: Import but, there is a better way.
+[945.075] Speaker 0: I can generate, give me a Flask minimal template which serves which serves a form that takes, that takes an audio file as an input and uploads it to the static folder.
+[969.78] Speaker 0: Let's see here.
+[970.5] Speaker 0: I'll show you what I'm doing.
+[973.06] Speaker 0: Oh wow.
+[973.86] Speaker 0: Oh wow.
+[974.9] Speaker 0: So whenever I get from Flask, import Flask, request, redirect and definitely, I can check.
+[1020.39996] Speaker 0: Main.py, I guess for some reason main.py is here main.py.
+[1025.52] Speaker 0: Let's run it now.
+[1026.72] Speaker 0: So when you do Python main.py here, however, put 5 1,000 open for use the 0.0.0.0 to open the port to web traffic.
+[1036.105] Speaker 0: Okay.
+[1036.585] Speaker 0: So we can't go to 0 and let's see.
+[1072.02] Speaker 0: I'll just upload a click on it.
+[1073.8601] Speaker 0: You can use a static directory.
+[1106.99] Speaker 0: You might want to, you know, update this template or bootstrap you'll use.
+[1112.11] Speaker 0: But I'll use this.
+[1112.99] Speaker 0: Or you'll need to and at the same time, that is something to give me.
+[1160.71] Speaker 0: Uploads.
+[1161.35] Speaker 0: Okay.
+[1161.59] Speaker 0: So I'll try to make sure I click on static.
+[1164.07] Speaker 0: Instead of uploads, I'll try to start.
+[1165.9099] Speaker 0: Or here.
+[1170.505] Speaker 0: URL for uploaded file.
+[1172.025] Speaker 0: Here.
+[1173.225] Speaker 0: So this is not found.
+[1187.575] Speaker 0: Upload.
+[1229.68] Speaker 0: Instead, I'll return the transcript.
+[1234.3201] Speaker 0: Okay?
+[1234.88] Speaker 0: So instead of saying this, I'll open JSON if I import Or I'll call you Jsonify transcript.
+[1246.345] Speaker 0: That's it.
+[1267.2101] Speaker 0: And let's try to run the server.
+[1269.13] Speaker 0: 'Current terminated triple quote' okay.
+[1271.53] Speaker 0: 'I'll try to run return triple dot redirect.
+[1276.615] Speaker 0: Okay.
+[1277.3351] Speaker 0: So here we are returning.
+[1278.6951] Speaker 0: I don't know why we are returning.
+[1280.76] Speaker 0: But I think we are good to go now.
+[1282.36] Speaker 0: So, if you are using the file, you can upload the file or file.
+[1285.16] Speaker 0: Once you upload it, you can upload it.
+[1306.985] Speaker 0: Amazing.
+[1307.385] Speaker 0: Yeah.
+[1307.4651] Speaker 0: Amazing.
+[1308.425] Speaker 0: So this web interface is my channel.
+[1310.665] Speaker 0: I'll upload my video.
+[1311.365] Speaker 0: I'll be back on the web interface.
+[1314.745] Speaker 0: I'll make cheese or something.
+[1316.665] Speaker 0: I can We currently support the following languages through both transcription and translations end point.
+[1335.5299] Speaker 0: Instead of digging the documentation, change this code to translate to Bengali.
+[1340.245] Speaker 0: I will run it.
+[1343.285] Speaker 0: I will use my target language is equal to bn.
+[1346.485] Speaker 0: Oops.
+[1347.925] Speaker 0: Control zed.
+[1349.365] Speaker 0: In fact, we'll get started.
+[1353.9199] Speaker 0: We'll change this to translate to Bengali.
+[1391.975] Speaker 0: My name is Hari, and I will teach you how to use OpenAI.
+[1394.935] Speaker 0: Target language bn.
+[1397.23] Speaker 0: So let me see what is wrong.
+[1399.87] Speaker 0: In fact, target language is equal to bn.
+[1405.595] Speaker 0: Okay.
+[1405.755] Speaker 0: So it seems that language is equal to Mujid Alnabodega, but let me try it.
+[1409.915] Speaker 0: Target language is equal to PN.
+[1412.635] Speaker 0: Let's try to run it or Python or old main dot py.
+[1419.16] Speaker 0: Let's see.
+[1420.28] Speaker 0: Or API key.
+[1423.7351] Speaker 0: Okay.
+[1423.895] Speaker 0: Let's do one thing here.
+[1424.8551] Speaker 0: Yeah.
+[1425.015] Speaker 0: But target language change.
+[1426.125] Speaker 0: I'll change language.
+[1471.5399] Speaker 0: Translation is copy or simply copy and instead of saying here, me's bang volume directly translate.
+[1488.65] Speaker 0: Response is equal to openai.chatcompletion.complete.
+[1494.25] Speaker 0: Sorry.
+[1494.73] Speaker 0: Create.
+[1495.415] Speaker 0: We have a API reference.
+[1496.815] Speaker 0: We have a model.
+[1499.335] Speaker 0: Sorry.
+[1499.575] Speaker 0: Completion.
+[1499.975] Speaker 0: We have GPT-four completion.
+[1501.575] Speaker 0: We have a example of this basically We have to use Python.
+[1507.25] Speaker 0: Completion dot create.
+[1509.01] Speaker 0: And this is a text.
+[1512.225] Speaker 0: This is indeed a text.
+[1516.065] Speaker 0: Gpt forecast.
+[1518.865] Speaker 0: Gpt examples translate role system paste.
+[1555.61] Speaker 0: So you can paste it in the rule system context that you are a helpful assistant.
+[1561.485] Speaker 0: In fact, I'm using the system.
+[1576.985] Speaker 0: Role user or role user or content dot complete messages or, role system.
+[1632.475] Speaker 0: Or is equal to role is not defined.
+[1637.275] Speaker 0: Messages is equal to double quotes and yes, it indeed ran or but do not choose or upload and let's see.
+[1662.0901] Speaker 0: Is not of type string.
+[1663.37] Speaker 0: Okay.
+[1663.6901] Speaker 0: So you can see, invalid request error.
+[1666.65] Speaker 0: My name is Harry.
+[1667.37] Speaker 0: And today I will teach you how to use open a is not of type string.
+[1671.1051] Speaker 0: Okay.
+[1671.745] Speaker 0: So I'll try to transcribe.text.
+[1676.0651] Speaker 0: I think this will fix it.
+[1678.49] Speaker 0: Because we'll text it now, which makes sense.
+[1681.21] Speaker 0: Let's continue.
+[1682.57] Speaker 0: Okay.
+[1682.7032] Speaker 0: I hope that I run request.
+[1751.915] Speaker 0: File.
+[1761.26] Speaker 0: Language is equal to request dot form language.
+[1765.5] Speaker 0: Okay?
+[1765.5801] Speaker 0: Or I will make a HTML.
+[1767.5801] Speaker 0: In fact, in HTML, I might want to render template.
+[1773.275] Speaker 0: So I will return render template index.
+[1775.97] Speaker 0: HTML or folder.
+[1779.09] Speaker 0: Templates.
+[1780.77] Speaker 0: Or index.
+[1782.61] Speaker 0: HTML template.
+[1801.9651] Speaker 0: Also, add an input tag with name, language in the form.
+[1810.2] Speaker 0: Let's see if it changes.
+[1813.1599] Speaker 0: I'm really, really excited that you can't And let's see which, might make it look good but time will tell.
+[1831.72] Speaker 0: Type file name is equal to language.
+[1833.48] Speaker 0: I'm impressed.
+[1834.2] Speaker 0: I'm impressed.
+[1835.745] Speaker 0: Okay.
+[1836.065] Speaker 0: So let's run this app and definitely when I tap this, I'll run.
+[1841.9049] Speaker 0: I'll prefer.
+[1842.96] Speaker 0: To start.
+[1847.9199] Speaker 0: Or I guess I'll import render template, so I'll I'll have to import render template.
+[1854.115] Speaker 0: Render template and yes.
+[1857.5549] Speaker 0: Now it should work.
+[1858.995] Speaker 0: We ran into an internal render template.
+[1868.775] Speaker 0: Hopefully, this should work.
+[1870.375] Speaker 0: Index.
+[1870.775] Speaker 0: HTML is not found.
+[1873.415] Speaker 0: Render template argument index.
+[1878.53] Speaker 0: HTML not found.
+[1880.13] Speaker 0: Templates.
+[1880.61] Speaker 0: Static template.
+[1882.69] Speaker 0: I should have put this template folder outside.
+[1885.89] Speaker 0: Outside move Stop.
+[1890.1349] Speaker 0: And it should work now.
+[1891.8949] Speaker 0: Oh wow, it works.
+[1893.335] Speaker 0: But again, styles.
+[1913.55] Speaker 0: Add add and then put with name language in the form.
+[1922.8849] Speaker 0: Also, style this form using CSS.
+[1928.1649] Speaker 0: Add a nav bar.
+[1930.21] Speaker 0: Make it responsive.
+[1934.37] Speaker 0: Okay.
+[1934.77] Speaker 0: So my ghostwriter is still open and wait.
+[1937.1699] Speaker 0: Ghostwriter is really very amazing.
+[1945.245] Speaker 0: Because it is built into Replit and why should I not use Hostwriter.
+[1951.2001] Speaker 0: Obviously, We'll accept.
+[1966.91] Speaker 0: We'll accept suggestion the last time.
+[1969.31] Speaker 0: Here is this.
+[1970.0701] Speaker 0: We'll just give you a code.
+[1971.9501] Speaker 0: We'll update you.
+[1973.195] Speaker 0: But this time, I think I'm gonna stop.
+[1976.5549] Speaker 0: Okay.
+[1976.875] Speaker 0: Restart.
+[1978.955] Speaker 0: Restart.
+[1980.795] Speaker 0: And let me see what the problem is.
+[1982.94] Speaker 0: It seems that, vertically a center.
+[1985.66] Speaker 0: Now I'm gonna try to get a problem.
+[1989.66] Speaker 0: Let me see.
+[1998.03] Speaker 0: Body display flex which is which doesn't sound good to me.
+[2003.0701] Speaker 0: Body display flex I think justify content center.
+[2007.745] Speaker 0: Let me fix it.
+[2010.705] Speaker 0: Justify content center.
+[2088.065] Speaker 0: See French text.
+[2095.1199] Speaker 0: Image of Bengali text.
+[2097.92] Speaker 0: Okay.
+[2098.08] Speaker 0: So I got it here with Bengali text.
+[2100.32] Speaker 0: Main.py.
+[2101.5999] Speaker 0: Many of Bengali hard code.
+[2119.4648] Speaker 0: Okay.
+[2120.7449] Speaker 0: Let's restart.
+[2121.785] Speaker 0: Let's restart everything.
+[2123.9448] Speaker 0: Or, I prefer French.
+[2241.7952] Speaker 0: Deployment start build deploy and finally deploy.
+[2250.51] Speaker 0: So let's wait for it.
+[2251.3901] Speaker 0: Let's wait.
+[2252.35] Speaker 0: Thank you deploy.
+[2254.9102] Speaker 0: And definitely, so I'm just waiting for it.
+[2313.715] Speaker 0: Install minus open a I whisper.
+[2315.715] Speaker 0: In fact, I'll be using a repository.
+[2320.675] Speaker 0: But again, Japanese.wav language Japanese.wav whisper but again resources GPU we use settings so we can update this repo up, explore Hi.
+[2465.1199] Speaker 0: Stop recording.
+[2653.19] Speaker 0: Assure you that I'll be able to get a refund to recharge.
+[2656.31] Speaker 0: It's It's going to be worth it.
+[2666.1848] Speaker 0: So I hope you upload my video.
+[2668.9849] Speaker 0: Mess up links so I get relevant
