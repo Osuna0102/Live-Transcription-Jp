@@ -11,7 +11,9 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from datetime import date
 import requests
+from ..settings import dg_client_key
 
+dg_client = Deepgram(dg_client_key)
 
 load_dotenv()
 app = FastAPI()
@@ -136,7 +138,4 @@ async def transcript(file: UploadFile = File(...), language: str = Form(...)):
     else:
         return {"error": "Failed to transcribe"}, response.status_code
     
-from ..settings import dg_client_key
-
-dg_client = Deepgram(dg_client_key)
 
